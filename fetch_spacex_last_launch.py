@@ -1,8 +1,10 @@
 import requests, os, argparse
 
+def image_downloading(path, filename):
+    response
+
 def fetch_spacex_last_launch(url, path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+    os.makedirs(path,exist_ok=True)
     response = requests.get(url)
     response.raise_for_status()
     data = response.json()
@@ -13,8 +15,9 @@ def fetch_spacex_last_launch(url, path):
             file_name = f'space{index}.jpg'
             new_response = requests.get(link)
             new_response.raise_for_status()
-            if new_response.status_code == 200:
-                with open(f'{path}/{file_name}', 'wb') as file:
+            new_path = os.path.join(path, file_name)
+            if new_response.ok:
+                with open(new_path, 'wb') as file:
                     file.write(new_response.content)
             else:
                 return 'Failed to retrive data'

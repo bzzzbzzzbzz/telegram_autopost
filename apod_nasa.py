@@ -1,9 +1,8 @@
 import requests, os
 from urllib.parse import urlsplit
 
-def apod_nasa_random_photo(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+def fetch_apod_nasa_photos(path):
+    os.makedirs(path, exist_ok=True)
     payload = {'api_key': 'DEMO_KEY',
                'count': 30}
     response = requests.get(f'https://api.nasa.gov/planetary/apod', params=payload)
@@ -17,13 +16,14 @@ def apod_nasa_random_photo(path):
             filename = f'nasa{index}{os.path.splitext(temp_link)[1]}'
             new_response = requests.get(link)
             new_response.raise_for_status()
-            if new_response.status_code == 200:
-                with open(f'{path}/{filename}', 'wb') as file:
+            new_path = os.path.join(path, filename)
+            if new_response.ok:
+                with open(new_path, 'wb') as file:
                     file.write(new_response.content)
             else:
                 return 'Failed to retrive data'
 
 
-path = 'images/'
-
-apod_nasa_random_photo(path)
+if __name__ == '__main__':
+    path = 'images/'
+    fetch_apod_nasa_photos(path)

@@ -2,9 +2,8 @@ import os.path
 
 import requests
 
-def epic_nasa_today(url,path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+def fetch_epic_nasa_today(url,path):
+    os.makedirs(path, exist_ok=True)
     response = requests.get(url)
     response.raise_for_status()
     for index, data in enumerate(response.json()):
@@ -16,12 +15,12 @@ def epic_nasa_today(url,path):
         new_response = requests.get(photo_link)
         new_response.raise_for_status()
         filename = f'epic{index}.png'
-        with open (f'{path}{filename}', 'wb') as file:
+        new_path = os.path.join(path, filename)
+        with open (new_path, 'wb') as file:
             file.write(new_response.content)
 
 
-
-url = 'https://api.nasa.gov/EPIC/api/natural/images?api_key=DEMO_KEY'
-path = 'images/'
-
-epic_nasa_today(url, path)
+if __name__ == '__main__':
+    url = 'https://api.nasa.gov/EPIC/api/natural/images?api_key=DEMO_KEY'
+    path = 'images/'
+    fetch_epic_nasa_today(url, path)
