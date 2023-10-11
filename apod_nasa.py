@@ -1,11 +1,11 @@
-import requests, os
+import requests, os, argparse
 from urllib.parse import urlsplit
+import write_file_func as wf
 
-def fetch_apod_nasa_photos(path):
+def fetch_apod_nasa_photos(path, url):
     os.makedirs(path, exist_ok=True)
-    payload = {'api_key': 'DEMO_KEY',
-               'count': 30}
-    response = requests.get(f'https://api.nasa.gov/planetary/apod', params=payload)
+    payload = {'count': 30}
+    response = requests.get(url, params=payload)
     response.raise_for_status()
     json_data = response.json()
     for index, data in enumerate(json_data):
@@ -14,16 +14,15 @@ def fetch_apod_nasa_photos(path):
             splited_link = urlsplit(link)
             temp_link = f'{splited_link.netloc}{splited_link.path}'
             filename = f'nasa{index}{os.path.splitext(temp_link)[1]}'
-            new_response = requests.get(link)
-            new_response.raise_for_status()
             new_path = os.path.join(path, filename)
-            if new_response.ok:
-                with open(new_path, 'wb') as file:
-                    file.write(new_response.content)
-            else:
-                return 'Failed to retrive data'
+            wf.download_image(new_path, link)
+
+
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='enter your url http://...')
+    parser.add_argument('url', metavar='url', help='enter your url: ')
+    args = parser.parse_args()
     path = 'images/'
-    fetch_apod_nasa_photos(path)
+    fetch_apod_nasa_photos(path,args.url)

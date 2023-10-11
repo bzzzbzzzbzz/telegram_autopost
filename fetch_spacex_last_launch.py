@@ -1,7 +1,5 @@
 import requests, os, argparse
-
-def image_downloading(path, filename):
-    response
+import write_file_func as wf
 
 def fetch_spacex_last_launch(url, path):
     os.makedirs(path,exist_ok=True)
@@ -13,24 +11,18 @@ def fetch_spacex_last_launch(url, path):
     else:
         for index, link in enumerate(data['links']['flickr']['original']):
             file_name = f'space{index}.jpg'
-            new_response = requests.get(link)
-            new_response.raise_for_status()
             new_path = os.path.join(path, file_name)
-            if new_response.ok:
-                with open(new_path, 'wb') as file:
-                    file.write(new_response.content)
-            else:
-                return 'Failed to retrive data'
+            wf.download_image(link, new_path)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='enter your url http://...')
-    parser.add_argument('url', metavar='url', help='enter your url: ')
+    parser = argparse.ArgumentParser(description='enter your launch')
+    parser.add_argument('launch', help='enter your url: ')
     path = 'images/'
     if not parser:
         url = 'https://api.spacexdata.com/v5/launches/latest'
         fetch_spacex_last_launch(url, path)
     else:
         args = parser.parse_args()
-        fetch_spacex_last_launch(args.url,path)
+        url = f'https://api.spacexdata.com/v5/launches/{args.launch}'
+        fetch_spacex_last_launch(url,path)
 
-#https://api.spacexdata.com/v5/launches/5eb87d47ffd86e000604b38a

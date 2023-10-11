@@ -1,6 +1,7 @@
 import os.path
-
+import argparse
 import requests
+import write_file_func as wf
 
 def fetch_epic_nasa_today(url,path):
     os.makedirs(path, exist_ok=True)
@@ -12,15 +13,15 @@ def fetch_epic_nasa_today(url,path):
         split_date = photo_date.split(' ')
         new_split = split_date[0].split('-')
         photo_link = f'https://api.nasa.gov/EPIC/archive/natural/{new_split[0]}/{new_split[1]}/{new_split[2]}/png/{photo_name}.png?api_key=DEMO_KEY'
-        new_response = requests.get(photo_link)
-        new_response.raise_for_status()
         filename = f'epic{index}.png'
         new_path = os.path.join(path, filename)
-        with open (new_path, 'wb') as file:
-            file.write(new_response.content)
+        wf.download_image(photo_link, new_path)
 
 
 if __name__ == '__main__':
-    url = 'https://api.nasa.gov/EPIC/api/natural/images?api_key=DEMO_KEY'
+    parser = argparse.ArgumentParser(description='enter your token')
+    parser.add_argument('token', help='enter your token ')
+    args = parser.parse_args()
+    url = f'https://api.nasa.gov/EPIC/api/natural/images?api_key={args.token}'
     path = 'images/'
     fetch_epic_nasa_today(url, path)
