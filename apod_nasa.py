@@ -15,14 +15,15 @@ def fetch_apod_nasa_photos(path, url):
             temp_link = f'{splited_link.netloc}{splited_link.path}'
             filename = f'nasa{index}{os.path.splitext(temp_link)[1]}'
             new_path = os.path.join(path, filename)
-            wf.download_image(new_path, link)
+            wf.download_image(link,new_path)
 
 
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='enter your url http://...')
-    parser.add_argument('url', metavar='url', help='enter your url: ')
+    parser = argparse.ArgumentParser(description='enter your token')
+    parser.add_argument('--token', metavar='token', help='enter your token: ', default='DEMO_KEY')
     args = parser.parse_args()
+    url = f'https://api.nasa.gov/planetary/apod?api_key={args.token}'
     path = 'images/'
-    fetch_apod_nasa_photos(path,args.url)
+    fetch_apod_nasa_photos(path,url)

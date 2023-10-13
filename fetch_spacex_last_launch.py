@@ -16,13 +16,9 @@ def fetch_spacex_last_launch(url, path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='enter your launch')
-    parser.add_argument('launch', help='enter your url: ')
+    parser.add_argument('--launch', help='enter your url: ', default='latest')
     path = 'images/'
-    if not parser:
-        url = 'https://api.spacexdata.com/v5/launches/latest'
-        fetch_spacex_last_launch(url, path)
-    else:
-        args = parser.parse_args()
-        url = f'https://api.spacexdata.com/v5/launches/{args.launch}'
-        fetch_spacex_last_launch(url,path)
+    args = parser.parse_args()
+    url = f'https://api.spacexdata.com/v5/launches/{args.launch}'
+    fetch_spacex_last_launch(url,path)
 
