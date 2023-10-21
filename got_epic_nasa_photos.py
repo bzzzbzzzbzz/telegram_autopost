@@ -1,7 +1,7 @@
 import os.path
 import argparse
 import requests
-import write_file_func as wf
+import download_send_img as di
 from datetime import datetime
 
 
@@ -17,12 +17,12 @@ def fetch_epic_nasa_today(path, token):
         photo_link = f'https://api.nasa.gov/EPIC/archive/natural/{photo_date.year}/{photo_date.month}/{photo_date.day}/png/{photo_name}.png'
         filename = f'epic{index}.png'
         new_path = os.path.join(path, filename)
-        wf.download_image_with_api(photo_link, new_path, token)
+        di.download_image(photo_link, new_path, token)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='enter your token or path')
     parser.add_argument('--token', help='enter your token ', default='DEMO_KEY')
-    parser.add_argument('--path', help='enter your path ', default='images')
+    parser.add_argument('--img_dir', help='enter your path ', default='images')
     args = parser.parse_args()
-    fetch_epic_nasa_today(args.path, args.token)
+    fetch_epic_nasa_today(args.img_dir, args.token)
