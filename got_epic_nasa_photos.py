@@ -7,7 +7,7 @@ from datetime import datetime
 
 def fetch_epic_nasa_today(path, token):
     os.makedirs(path, exist_ok=True)
-    url = f'https://api.nasa.gov/EPIC/api/natural/images'
+    url = 'https://api.nasa.gov/EPIC/api/natural/images'
     params = {'api_key': token}
     response = requests.get(url, params=params)
     response.raise_for_status()

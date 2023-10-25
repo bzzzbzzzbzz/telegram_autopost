@@ -1,6 +1,9 @@
-import requests, os, argparse
+import requests
+import os
+import argparse
 from urllib.parse import urlsplit
 import download_send_img as di
+
 
 def get_image_expansion(link):
     split_link = urlsplit(link)
@@ -8,9 +11,10 @@ def get_image_expansion(link):
     expansion = os.path.splitext(temp_link)[1]
     return expansion
 
+
 def fetch_apod_nasa_photos(path, token, count):
     os.makedirs(path, exist_ok=True)
-    url = f'https://api.nasa.gov/planetary/apod'
+    url = 'https://api.nasa.gov/planetary/apod'
     payload = {'count': count,
                'api_key': token}
     response = requests.get(url, params=payload)
@@ -22,8 +26,6 @@ def fetch_apod_nasa_photos(path, token, count):
             filename = f'nasa{index}{get_image_expansion(link)}'
             new_path = os.path.join(path, filename)
             di.download_image(link, new_path)
-
-
 
 
 if __name__ == '__main__':

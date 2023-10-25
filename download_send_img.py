@@ -1,5 +1,7 @@
-import requests, os
+import requests
+import os
 import telegram
+
 
 def download_image(link, path, token=None):
     params = {'api_key': token}
@@ -9,8 +11,16 @@ def download_image(link, path, token=None):
         file.write(response.content)
 
 
-def send_photo_tg_bot(path, img_name, token):
+def send_photo_tg_bot(img_name, token, chat_id):
     bot = telegram.Bot(token=token)
-    new_path = os.path.join(path, img_name)
-    with open(new_path, 'rb') as file:
-        bot.send_photo(chat_id=os.environ['TG_CHAT_ID'], photo=file)
+    with open(img_name, 'rb') as file:
+        bot.send_photo(chat_id=chat_id, photo=file)
+
+
+def list_of_path_images(path):
+    data = list(os.walk(path))
+    empty_list = []
+    for image in data[0][2]:
+        new_path = os.path.join(path, image)
+        empty_list.append(new_path)
+    return empty_list
