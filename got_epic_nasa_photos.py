@@ -17,7 +17,7 @@ def fetch_epic_nasa_today(path, token):
         photo_link = f'https://api.nasa.gov/EPIC/archive/natural/{photo_date.year}/{photo_date.month}/{photo_date.day}/png/{photo_name}.png'
         filename = f'epic{index}.png'
         new_path = os.path.join(path, filename)
-        di.download_image(photo_link, new_path, token)
+        di.download_image(photo_link, new_path, params = {'api_key': token})
 
 
 if __name__ == '__main__':

@@ -3,8 +3,7 @@ import os
 import telegram
 
 
-def download_image(link, path, token=None):
-    params = {'api_key': token}
+def download_image(link, path, params=None):
     response = requests.get(link, params=params)
     response.raise_for_status()
     with open(path, 'wb') as file:
